@@ -1,0 +1,79 @@
+/* Additional app-specific styles */
+.app-container {
+  @apply min-h-screen bg-background;
+}
+
+.dashboard-grid {
+  @apply grid grid-cols-1 lg:grid-cols-4 gap-6;
+}
+
+.main-content {
+  @apply lg:col-span-3;
+}
+
+.sidebar {
+  @apply lg:col-span-1;
+}
+
+/* Custom animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Connection status indicator */
+.connection-indicator {
+  @apply inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.connection-connected {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+}
+
+.connection-disconnected {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+}
+
+.connection-pending {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
+/* Trade status styles */
+.trade-status {
+  @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.trade-completed {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+}
+
+.trade-pending {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
+.trade-failed {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+}
+
+/* Profit/Loss indicators */
+.profit-positive {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.profit-negative {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.profit-neutral {
+  @apply text-muted-foreground;
+}
