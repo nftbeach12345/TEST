@@ -48,7 +48,7 @@ export class StorageService {
       this.isDbConnected = true;
       console.log('✅ Database connected successfully');
     } catch (error) {
-      console.log('⚠️ Database connection failed, using in-memory storage:', error.message);
+      console.log('⚠️ Database connection failed, using in-memory storage:', error instanceof Error ? error.message : 'Unknown error');
       this.isDbConnected = false;
     }
   }
@@ -101,7 +101,7 @@ export class StorageService {
     }
     
     // Memory fallback
-    for (const user of this.memoryStorage.users.values()) {
+    for (const user of Array.from(this.memoryStorage.users.values())) {
       if (user.username === username) {
         return user;
       }
@@ -124,6 +124,11 @@ export class StorageService {
     // Memory fallback
     const newConfig: BotConfig = {
       ...config,
+      scanInterval: config.scanInterval || 15,
+      isActive: config.isActive || false,
+      walletAddress: config.walletAddress || null,
+      privateKey: config.privateKey || null,
+      mockMode: config.mockMode || true,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -200,7 +205,13 @@ export class StorageService {
     }
     
     // Memory fallback
-    const newTrade: Trade = trade;
+    const newTrade: Trade = {
+      ...trade,
+      txSignature: trade.txSignature || null,
+      errorMessage: trade.errorMessage || null,
+      executedAt: trade.executedAt || new Date(),
+      isMock: trade.isMock || false
+    };
     this.memoryStorage.trades.set(trade.id, newTrade);
     return newTrade;
   }
@@ -264,7 +275,12 @@ export class StorageService {
     }
     
     // Memory fallback
-    const newOpportunity: ArbitrageOpportunity = opportunity;
+    const newOpportunity: ArbitrageOpportunity = {
+      ...opportunity,
+      detectedAt: opportunity.detectedAt || new Date(),
+      wasExecuted: opportunity.wasExecuted || false,
+      executedTradeId: opportunity.executedTradeId || null
+    };
     this.memoryStorage.opportunities.set(opportunity.id, newOpportunity);
     return newOpportunity;
   }

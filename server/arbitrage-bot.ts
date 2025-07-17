@@ -61,7 +61,7 @@ export class ArbitrageBot {
     } catch (error) {
       console.error('Failed to start bot:', error);
       this.isRunning = false;
-      this.broadcastBotStatus(error.message);
+      this.broadcastBotStatus(error instanceof Error ? error.message : 'Unknown error');
       return false;
     }
   }
@@ -251,7 +251,7 @@ export class ArbitrageBot {
       const errorTrade: NewTrade = {
         ...tradeRecord,
         status: 'failed',
-        errorMessage: error.message
+        errorMessage: error instanceof Error ? error.message : 'Unknown error'
       };
 
       await this.storageService.updateTrade(tradeId, errorTrade);
@@ -288,7 +288,7 @@ export class ArbitrageBot {
         amountRequired: parseFloat(opportunity.amountRequired),
         dexA: opportunity.dexA,
         dexB: opportunity.dexB,
-        detectedAt: opportunity.detectedAt.getTime()
+        detectedAt: opportunity.detectedAt?.getTime() || Date.now()
       },
       timestamp: Date.now()
     };
@@ -307,11 +307,11 @@ export class ArbitrageBot {
         amountOut: parseFloat(trade.amountOut),
         profit: parseFloat(trade.profit),
         profitPercentage: parseFloat(trade.profitPercentage),
-        txSignature: trade.txSignature,
+        txSignature: trade.txSignature || undefined,
         status: trade.status as 'pending' | 'completed' | 'failed',
-        errorMessage: trade.errorMessage,
-        executedAt: trade.executedAt.getTime(),
-        isMock: trade.isMock
+        errorMessage: trade.errorMessage || undefined,
+        executedAt: trade.executedAt?.getTime() || Date.now(),
+        isMock: trade.isMock || false
       },
       timestamp: Date.now()
     };

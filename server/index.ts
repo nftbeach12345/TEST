@@ -12,6 +12,11 @@ import { COMMON_TOKENS } from '../shared/types.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Helper function to get error message
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Unknown error';
+}
+
 const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT || 3000;
@@ -56,7 +61,7 @@ try {
   await storageService.createBotConfig(demoConfig);
   console.log('✅ Demo user and config created');
 } catch (error) {
-  console.log('Demo user and config already exist or error occurred:', error.message);
+  console.log('Demo user and config already exist or error occurred:', error instanceof Error ? error.message : 'Unknown error');
 }
 
 // API Routes
@@ -75,7 +80,7 @@ app.get('/api/bot/status', async (req, res) => {
     };
     res.json(status);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -100,7 +105,7 @@ app.post('/api/bot/start', async (req, res) => {
       res.status(400).json({ error: 'Failed to start bot' });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -110,7 +115,7 @@ app.post('/api/bot/stop', async (req, res) => {
     await arbitrageBot.stop();
     res.json({ message: 'Bot stopped successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -120,7 +125,7 @@ app.get('/api/configs', async (req, res) => {
     const configs = await storageService.getBotConfigsByUserId('demo-user');
     res.json(configs);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -136,7 +141,7 @@ app.post('/api/configs', async (req, res) => {
     const created = await storageService.createBotConfig(config);
     res.json(created);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -152,7 +157,7 @@ app.put('/api/configs/:id', async (req, res) => {
     
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -162,7 +167,7 @@ app.get('/api/trades', async (req, res) => {
     const trades = await storageService.getTradesByUserId('demo-user');
     res.json(trades);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -172,7 +177,7 @@ app.get('/api/opportunities', async (req, res) => {
     const opportunities = await storageService.getOpportunitiesByUserId('demo-user');
     res.json(opportunities);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -183,7 +188,7 @@ app.get('/api/wallet/balance', async (req, res) => {
     const balance = await solanaService.getBalance(token as string);
     res.json({ balance });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -193,7 +198,7 @@ app.get('/api/wallet/address', async (req, res) => {
     const address = solanaService.getWalletAddress();
     res.json({ address });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -215,7 +220,7 @@ app.post('/api/test/arbitrage', async (req, res) => {
     
     res.json(opportunity);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -231,7 +236,7 @@ app.get('/api/health', async (req, res) => {
     };
     res.json(health);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
