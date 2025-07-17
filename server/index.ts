@@ -277,9 +277,10 @@ process.on('SIGINT', () => {
 });
 
 // Start server
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Solana Arbitrage Bot server running on port ${PORT}`);
   console.log(`📊 Dashboard: http://localhost:${PORT}`);
+  console.log(`📊 External: http://0.0.0.0:${PORT}`);
   console.log(`📡 WebSocket: ws://localhost:${PORT}/ws`);
   console.log(`🔧 Mock mode: ${demoConfig.mockMode ? 'ENABLED' : 'DISABLED'}`);
 });
